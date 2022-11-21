@@ -1,16 +1,13 @@
-# This is a sample Python script.
-
-# Press Maj+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from tkinter import *
+
+window = Tk()
+window.geometry("720x480")
+window.title("bienvenue au jeu du force3")
+window.config(background='grey')
+label_tile=Label(window ,text="Bienvenue au jeu du force 3",font=("Courriel",20),bg='blue',fg='white')
+label_tile.pack()
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('coucou ')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+window.mainloop()
