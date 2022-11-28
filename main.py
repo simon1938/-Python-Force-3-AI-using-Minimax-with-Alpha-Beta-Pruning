@@ -1,6 +1,7 @@
-
+from Token import Token
+from GameArea import GameArea
 from tkinter import *
-
+""""
 class canva(Canvas):
 
     def __init__(self):
@@ -30,4 +31,12 @@ if __name__ == "__main__":
     window.title("Puissance 4")
     window.config(bg="navy blue")
     canva = canva()
-    window.mainloop()
+    window.mainloop() """
+
+
+token = Token("rouge", 4, 5)
+rep = token.gettokenposition()
+
+print("La position du token est " + str(rep))
+board = GameArea()
+board.displaygamearea()
