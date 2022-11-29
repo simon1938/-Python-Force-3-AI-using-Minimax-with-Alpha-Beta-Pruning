@@ -6,3 +6,5 @@ class Tile:
 
     def issquaretoken(self):
         return self.squaretoken
+    def getX(self)->int:
+        return self.pos_X

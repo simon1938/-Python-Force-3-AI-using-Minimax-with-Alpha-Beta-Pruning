@@ -1,4 +1,5 @@
 from Token import Token
+from Player import Player
 from GameArea import GameArea
 from tkinter import *
 """"
@@ -38,5 +39,8 @@ token = Token("rouge", 4, 5)
 rep = token.gettokenposition()
 
 print("La position du token est " + str(rep))
-board = GameArea()
+player1=Player(1,0)
+player2=Player(2,1)
+board = GameArea(player1,player2)
 board.displaygamearea()
+print("la position null est X="+str(board.emptyTile.getX())+"et Y="+str(board.emptyTile.getX()))
