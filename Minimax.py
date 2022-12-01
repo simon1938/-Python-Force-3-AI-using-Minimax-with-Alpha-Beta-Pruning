@@ -1,4 +1,4 @@
-import math
+'''import math
 import GameArea from GameArea
 import Node from Node
 import Player from Player
@@ -43,10 +43,10 @@ def evaluate(b):
 
 
 
-'''
+
 minimax function consider all the possibilities of a game an chose the most appropriate for the move play
 the functon return the better score of a turn
-'''
+
 def minimax(board, depth, isMax):
     score = evaluate(board)
 
@@ -135,7 +135,7 @@ def findBestMove(board):
 
 
 
-'''
+#pseudo code
 def minimax(curDepth, nodeIndex,maxTurn, scores,targetDepth):
 
     if (curDepth == targetDepth):
