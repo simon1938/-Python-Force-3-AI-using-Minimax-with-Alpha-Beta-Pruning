@@ -12,3 +12,9 @@ class CircleToken():
         self.color = color
         self.player_id = player_id
         self.token_id = token_id
+
+    def get_X(self):
+        return self.pos_X
+
+    def get_Y(self):
+        return self.pos_Y

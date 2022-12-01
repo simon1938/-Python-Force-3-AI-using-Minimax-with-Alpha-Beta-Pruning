@@ -1,3 +1,4 @@
+
 from SquareToken import SquareToken
 class Tile:
     """This class instanciates a tile of the game area which can carry a square token or not with the following parameters:

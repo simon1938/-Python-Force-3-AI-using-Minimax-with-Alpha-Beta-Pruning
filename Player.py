@@ -7,4 +7,5 @@ class Player:
         self.player_id = player_id
         self.color = color
         self.circletoken = []
+        self.circletoken_id = 0
 
