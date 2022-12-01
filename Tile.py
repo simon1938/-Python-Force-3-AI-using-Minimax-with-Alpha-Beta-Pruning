@@ -29,3 +29,19 @@ class Tile:
     def createSquareToken(self):
         self.squaretoken = SquareToken()
         return self.squaretoken
+
+    #Set the x coordinate
+    def set_X(self, new_X):
+        self.pos_X = new_X
+
+    #Set the y ccordinate
+    def set_Y(self, new_Y):
+        self.pos_Y = new_Y
+
+    #Get the x coordinate
+    def get_X(self):
+        return self.pos_X
+
+    # Get the y coordinate
+    def get_Y(self):
+        return self.pos_Y
