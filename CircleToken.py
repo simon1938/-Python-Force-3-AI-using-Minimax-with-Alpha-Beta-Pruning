@@ -18,3 +18,12 @@ class CircleToken():
 
     def get_Y(self):
         return self.pos_Y
+
+    def set_X(self, new_X):
+        self.pos_X = new_X
+
+    def set_Y(self, new_Y):
+        self.pos_Y = new_Y
+
+    def getPlayerId(self):
+        return self.player_id

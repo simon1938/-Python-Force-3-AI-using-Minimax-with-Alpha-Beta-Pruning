@@ -43,9 +43,20 @@ class GameArea:
     def switchTokenPosition(self, tile_1, tile_2):
         #If tile_2 is the empty tile
         if tile_2.squaretoken is None:
-            tile_2.setSquareToken(tile_1.squaretoken)
-            tile_1.squaretoken = None
-            self.emptytile = tile_1
+            #If there are circle token on tile_1
+            if tile_1.squaretoken.isCircleToken():
+                x = tile_2.get_X()
+                y = tile_2.get_Y()
+                #Change (x
+                tile_1.squaretoken.circletoken.set_X(x)
+                tile_1.squaretoken.circletoken.set_Y(y)
+                tile_2.setSquareToken(tile_1.squaretoken)
+                tile_1.squaretoken = None
+                self.emptytile = tile_1
+            else:
+                tile_2.setSquareToken(tile_1.squaretoken)
+                tile_1.squaretoken = None
+                self.emptytile = tile_1
         #If tile_1 is the empty tile
         else:
             tile_1.setSquareToken(tile_2.squaretoken)

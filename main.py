@@ -33,27 +33,27 @@ if __name__ == "__main__":
     window.config(bg="navy blue")
     canva = canva()
     window.mainloop() """
+
 player_1 = Player(1, "R")
 player_2 = Player(2, "B")
 board = GameArea(player_1, player_2)
+board.displayGameArea()
 for i in range(5):
     gm.next_round(board, player_1)
     board.displayGameArea()
     gm.next_round(board, player_2)
     board.displayGameArea()
+    """
 
 
-
-"""
 board.displayGameArea()
 board.addCircleToken(0,1,player_2)
 board.displayGameArea()
-board.addCircleToken(2,1,player_2)
+board.moveSquareToken(board.gamearea[0][1])
 board.displayGameArea()
-board.addCircleToken(0,2,player_1)
-board.displayGameArea()
-board.moveCircleToken(0,2,player_2,0)
-board.displayGameArea()"""
+print(board.gamearea[1][1].squaretoken.circletoken.get_X())
+print(board.gamearea[1][1].squaretoken.circletoken.get_Y())"""
+
 
 
 

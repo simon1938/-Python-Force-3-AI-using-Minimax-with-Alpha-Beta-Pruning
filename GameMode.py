@@ -36,4 +36,11 @@ def next_round(board, player):
         while circletoken not in {0, 1, 2}:
             circletoken = input()
         board.moveCircleToken(coordinate_x,coordinate_y,player,circletoken)
-
+    else:
+        coordinate_x = int(input("You are going to move a square token, choose x among (0,1,2)"))
+        while coordinate_x not in {0, 1, 2}:
+            coordinate_x = int(input())
+        coordinate_y = int(input("Choose y among (0,1,2)"))
+        while coordinate_y not in {0, 1, 2}:
+            coordinate_y = int(input())
+        board.moveSquareToken(board.gamearea[coordinate_x][coordinate_y])
