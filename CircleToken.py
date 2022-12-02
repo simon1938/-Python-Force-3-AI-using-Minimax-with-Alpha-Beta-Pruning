@@ -27,3 +27,6 @@ class CircleToken():
 
     def getPlayerId(self):
         return self.player_id
+
+    def getTokenId(self):
+        return self.token_id

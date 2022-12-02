@@ -2,8 +2,9 @@ from CircleToken import CircleToken
 
 class SquareToken():
     """This class instanciate a square token which can carry a circle token or not"""
-    def __init__(self):
+    def __init__(self, tile_id):
         self.circletoken = None
+        self.tile_id = tile_id
 
     #Put a circle token on the square token
     def setCircleToken(self, circletoken):
