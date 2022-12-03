@@ -9,3 +9,7 @@ class Player:
         self.circletoken = []
         self.circletoken_id = 0
 
+
+    def getnumberofcircletoken(self):
+        return len(self.circletoken)
+

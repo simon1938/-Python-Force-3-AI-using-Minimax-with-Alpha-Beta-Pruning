@@ -1,51 +1,22 @@
-'''import math
-import GameArea from GameArea
-import Node from Node
-import Player from Player
-import Tile from Tile
+
+from GameArea import GameArea
+from Player import Player
+from GameMode import isWinner
+from Tile import Tile
 
 # Checking if row can be complete by player or opponent
-def evaluate(b):
-    for row in range(3):
-        if (board[row][0] == board[row][1] and board[row][1] == board[row][2]):
-            if (board[row][0]..squaretoken==player == player):
-                return 10
-            elif (board[row][0]..squaretoken==player == opponent):
-                return -10
+def evaluate(board : GameArea):
 
-# Checking if columns can be complete by player or opponent
-    for col in range(3):
-
-        if (board[0][col] == board[1][col] and board[1][col] == board[2][col]):
-
-            if (board[0][col]..squaretoken==player  == player):
-                return 10
-            elif (board[0][col]..squaretoken==player == opponent):
-                return -10
-
-# Checking if diagonal can be complete by player or opponent
-    if (board[0][0] == board[1][1] and board[1][1] == board[2][2]):
-
-        if (board[0][0]..squaretoken==player == player):
+        if(isWinner(board.gamearea,board.player_1)):
             return 10
-        elif (board[0][0]..squaretoken==player == opponent):
+        elif(isWinner(board.gamearea,board.player_2)):
             return -10
-
-    if (board[0][2] == board[1][1] and board[1][1] == board[2][0]):
-
-        if (board[0][2]..squaretoken==player == player):
-            return 10
-        elif (board[0][2]..squaretoken==player == opponent):
-            return -10
-
-    # else no win
-    return 0
+        else:
+            return 0
 
 
-
-
-minimax function consider all the possibilities of a game an chose the most appropriate for the move play
-the functon return the better score of a turn
+#minimax function consider all the possibilities of a game an chose the most appropriate for the move play
+#the functon return the better score of a turn
 
 def minimax(board, depth, isMax):
     score = evaluate(board)
@@ -69,16 +40,16 @@ def minimax(board, depth, isMax):
         for i in range(3):
             for j in range(3):
 
-                if(board).tile==emptytile:
-                # Check if tile is empty
-                elif (board[i][j].squaretoken==node):
+                if(board.gamearea[i][j].squaretoken!=None):
+                    if(board.gamearea[i][j].squaretoken.circletoken==None):
 
-                    board[i][j] = player
-#resursivity minimax
-                    best = max(best, minimax(board,depth + 1,not isMax))
+                        board.gamearea[i][j].squaretoken.createCircletoken(i,j,'R', 0, board.gamearea.player_1.getnumberofcircletoken()+1)
 
-                    # Undo the move
-                    board[i][j] = '_'
+                        best = max(best, minimax(board,depth + 1,not isMax))
+
+                        # Undo the move
+                        board.gamearea[i][j].tile.squaretoken.circletoken.remove()
+
         return best
 
     # If this minimizer's move
@@ -89,22 +60,14 @@ def minimax(board, depth, isMax):
         for i in range(3):
             for j in range(3):
 
+                if (board.gamearea[i][j].squaretoken != None):
+                    if (board.gamearea[i][j].squaretoken.circletoken == None):
+                        board.gamearea[i][j].squaretoken.createCircletoken(i, j, 'B', 1,board.player_1.getnumberofcircletoken() + 1)
 
-                if(board).tile==emptytile:
-                # Check if tile is empty
-                elif (board[i][j].squaretoken==node):
+                        best = min(best, minimax(board, depth + 1, not isMax))
 
-                    board[i][j] = opponent
-
-                    # Call minimax recursively and choose
-                    # the minimum value
-                    best = min(best, minimax(board, depth + 1, not isMax))
-
-                    # Undo the move
-                    board[i][j] = '_'
-
-                #elsif compliqué sur le mouvement des tiles
-                #elsif sur le déplacement des circletokens
+                        # Undo the move
+                        board.gamearea[i][j].squaretoken.circletoken=None
         return best
 
 
@@ -117,23 +80,41 @@ def findBestMove(board):
     for i in range(3):
         for j in range(3):
 
-            # Check if cell is empty
-            if (board[i][j] == '_'):
-                board[i][j] = player
+            if (board.gamearea[i][j].squaretoken != None):
+                if (board.gamearea[i][j].squaretoken.circletoken == None):
+                    board.gamearea[i][j].squaretoken.createCircletoken(i, j, 'R', 0,board.player_1.getnumberofcircletoken() + 1)
 
+                    moveVal = minimax(board, 0, False)
+                    # Undo the move
+                    board.gamearea[i][j].squaretoken.circletoken=None
 
-                moveVal = minimax(board, 0, False)
+                    if (moveVal > bestVal):
+                        bestMove = (i, j)
+                        bestVal = moveVal
 
-                # Undo the move
-                board[i][j] = '_'
-
-                if (moveVal > bestVal):
-                    bestMove = (i, j)
-                    bestVal = moveVal
+    print("The value of the best Move is :", bestVal)
+    print()
 
     return bestMove
 
+if __name__ == '__main__':
 
+
+    player_1 = Player(0, "R")
+    player_2 = Player(1, "B")
+    board = GameArea(player_1, player_2)
+    board.addCircleToken(2,0,player_1)
+    board.displayGameArea()
+    board.addCircleToken(0, 0, player_1)
+    board.displayGameArea()
+
+
+
+    bestMove = findBestMove(board)
+
+    print("The Optimal Move is :")
+    print("ROW:", bestMove[0], " COL:", bestMove[1])
+'''
 
 #pseudo code
 def minimax(curDepth, nodeIndex,maxTurn, scores,targetDepth):
