@@ -4,10 +4,9 @@ from Player import Player
 from GameMode import isWinner
 from Tile import Tile
 
-#return the score of the current node
+# Checking if row can be complete by player or opponent
 def evaluate(board : GameArea):
 
-        #checking if there is a horizonrtal vertical or diagonal win
         if(isWinner(board.gamearea,board.player_1)):
             return 10
         elif(isWinner(board.gamearea,board.player_2)):
@@ -16,8 +15,9 @@ def evaluate(board : GameArea):
             return 0
 
 
-#minimax function consider all the possibilities could the game will become
-#and return the current value of the board
+#minimax function consider all the possibilities of a game an chose the most appropriate for the move play
+#the functon return the better score of a turn
+
 def minimax(board, depth, isMax):
     score = evaluate(board)
 
@@ -36,7 +36,7 @@ def minimax(board, depth, isMax):
     if (isMax):
         best = -1000
 
-        # Traverse all cells-> creation of all possibility
+        # Traverse all cells
         for i in range(3):
             for j in range(3):
 
@@ -44,10 +44,10 @@ def minimax(board, depth, isMax):
                     if(board.gamearea[i][j].squaretoken.circletoken==None):
 
                         board.gamearea[i][j].squaretoken.createCircletoken(i,j,'R', 0, board.gamearea.player_1.getnumberofcircletoken()+1)
-                        #recursion
+
                         best = max(best, minimax(board,depth + 1,not isMax))
 
-                        # delete the move
+                        # Undo the move
                         board.gamearea[i][j].tile.squaretoken.circletoken.remove()
 
         return best
@@ -63,7 +63,7 @@ def minimax(board, depth, isMax):
                 if (board.gamearea[i][j].squaretoken != None):
                     if (board.gamearea[i][j].squaretoken.circletoken == None):
                         board.gamearea[i][j].squaretoken.createCircletoken(i, j, 'B', 1,board.player_1.getnumberofcircletoken() + 1)
-                        #recursion
+
                         best = min(best, minimax(board, depth + 1, not isMax))
 
                         # Undo the move
