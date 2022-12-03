@@ -42,11 +42,18 @@ board.displayGameArea()
 
 
 
+player = [player_1, player_2]
+round = 0
+check = "0"
 
 
-for i in range(5):
-    gm.next_round(board, player_1)
+while check == "0":
+    check = gm.next_round(board, player[round])
     board.displayGameArea()
-    gm.next_round(board, player_2)
-    board.displayGameArea()
+    if round == 0:
+        round = 1
+    else:
+        round =0
+exit()
+
 
