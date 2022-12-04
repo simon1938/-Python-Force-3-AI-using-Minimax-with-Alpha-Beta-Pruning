@@ -82,7 +82,7 @@ def minimax(board, depth, isMax):
                         board.player_2.circletoken.append(board.gamearea[i][j].squaretoken.circletoken)
 
 
-                        print("nbcirlce"+str(board.player_2.circletoken_id))
+                        print("nbcirlces"+str(board.player_2.circletoken_id))
 
                         best = min(best, minimax(board, depth + 1, not isMax))
                         board.displayGameArea()
