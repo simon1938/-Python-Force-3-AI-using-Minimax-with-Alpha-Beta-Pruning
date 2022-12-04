@@ -76,10 +76,10 @@ def minimax(board, depth, isMax):
                     if (board.gamearea[i][j].squaretoken.circletoken == None and board.player_2.circletoken_id<3):
 
 
-                        board.gamearea[i][j].squaretoken.createCircletoken(i, j, 'B', 1,board.player_1.circletoken_id + 1)
-                        board.player_1.circletoken_id = board.player_1.circletoken_id + 1
+                        board.gamearea[i][j].squaretoken.createCircletoken(i, j, 'B', 1,board.player_2.circletoken_id + 1)
+                        board.player_2.circletoken_id = board.player_2.circletoken_id + 1
 
-                        board.player_1.circletoken.append(board.gamearea[i][j].squaretoken.circletoken)
+                        board.player_2.circletoken.append(board.gamearea[i][j].squaretoken.circletoken)
 
 
                         print("nbcirlce"+str(board.player_2.circletoken_id))
@@ -88,8 +88,8 @@ def minimax(board, depth, isMax):
                         board.displayGameArea()
                         # Undo the move
                         board.gamearea[i][j].squaretoken.circletoken=None
-                        board.player_1.circletoken_id = board.player_1.circletoken_id - 1
-                        board.player_1.circletoken.pop(board.player_1.circletoken_id)
+                        board.player_2.circletoken_id = board.player_2.circletoken_id - 1
+                        board.player_2.circletoken.pop(board.player_2.circletoken_id)
 
         return best
 
@@ -137,8 +137,9 @@ if __name__ == '__main__':
     player_1 = Player(0, "R")
     player_2 = Player(1, "B")
     board = GameArea(player_1, player_2)
-    board.addCircleToken(2,0,player_1)
-    board.addCircleToken(0, 0, player_1)
+    board.addCircleToken(0, 1, player_2)
+    board.addCircleToken(0,0, player_2)
+
 
     board.displayGameArea()
     bestMove = findBestMove(board)
