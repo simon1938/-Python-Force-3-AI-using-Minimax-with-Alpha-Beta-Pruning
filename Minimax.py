@@ -126,7 +126,7 @@ def findBestMove(board):
                         bestMove = (i, j)
                         bestVal = moveVal
 
-    print("The value of the best Move is :", bestVal)
+    print("The values of the best Move is :", bestVal)
     print()
 
     return bestMove
