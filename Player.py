@@ -11,3 +11,7 @@ class Player:
 
     def getnumberofcircletoken(self):
         return len(self.circletoken)
+    def showccircletoken(self):
+        for i in range(len(self.circletoken)):
+            print(self.circletoken[i].c, self.circletoken[i].get_Y())
+

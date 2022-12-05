@@ -1,4 +1,4 @@
-""""
+"""
 class canva(Canvas):
 
     def __init__(self):
@@ -29,3 +29,6 @@ if __name__ == "__main__":
     window.config(bg="navy blue")
     canva = canva()
     window.mainloop() """
+if __name__ == '__main__':
+    tab =[[0, 0], [0, 1], [0, 2], [1, 2], [2, 1]]
+    print(len(tab))

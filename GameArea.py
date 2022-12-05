@@ -204,13 +204,20 @@ class GameArea:
             return 0
 
     # Moves a circle token onto another square token if there is no circle token on it yet
-    def moveCircleToken(self, new_x, new_y, player, circletoken_id):
+    def moveCircleTokenia(self, new_x, new_y, player, token):
 
         # If there are a square token on the new tile
         if self.gamearea[new_x][new_y].isSquareToken():
             # If there are no circle token on the new square token
             if not self.gamearea[new_x][new_y].squaretoken.isCircleToken():
-                token_to_move = player.circletoken[circletoken_id]
+                # print("nb toekn"+str(len(player.circletoken)))
+                # if(player.circletoken==[]):
+                #     print("player token empty")
+                #     print("no circle token")
+                # print("test"+str(player.circletoken[circletoken_id].token_id))
+                # print(("test2"+str(circletoken_id)))
+              # token_to_move = player.circletoken[circletoken_id]
+                token_to_move = token
 
                 x = token_to_move.get_X()
                 y = token_to_move.get_Y()
@@ -225,6 +232,32 @@ class GameArea:
                 return 1
             else:
                 print("There are already a circle token on this quare token\n Retry player " + str(player.player_id) + " :\n")
+                return 0
+        else:
+            print("There are no square tokens on this tile\n Retry player " + str(player.player_id) + " :\n")
+            return 0
+
+    def moveCircleToken(self, new_x, new_y, player, circletoken_id):
+
+        # If there are a square token on the new tile
+        if self.gamearea[new_x][new_y].isSquareToken():
+            # If there are no circle token on the new square token
+            if not self.gamearea[new_x][new_y].squaretoken.isCircleToken():
+                token_to_move = player.circletoken[circletoken_id]
+
+                x = token_to_move.get_X()
+                y = token_to_move.get_Y()
+
+                self.gamearea[x][y].squaretoken.setCircleToken(None)
+
+                self.gamearea[new_x][new_y].squaretoken.setCircleToken(token_to_move)
+                token_to_move.set_X(new_x)
+                token_to_move.set_Y(new_y)
+
+                return 1
+            else:
+                print("There are already a circle token on this quare token\n Retry player " + str(
+                    player.player_id) + " :\n")
                 return 0
         else:
             print("There are no square tokens on this tile\n Retry player " + str(player.player_id) + " :\n")
