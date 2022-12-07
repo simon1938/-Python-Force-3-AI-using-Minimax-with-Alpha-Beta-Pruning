@@ -29,6 +29,7 @@ def allmovecirculartokens(board):
 def get_possible_moves(board,ismax):
 
     allmove= move()
+    allmove.place_token=[[]]
     allmove.move_tokens=allmovecirculartokens(board)
 
     for col in range(3):
@@ -49,10 +50,10 @@ def make_move(board,litlemove,indexmove,ismax):
     if(indexmove==0):
         if(ismax):
             board.addCircleToken(litlemove[0],litlemove[1],board.player_1)
-            #board.displayGameArea()
+            board.displayGameArea()
         else:
             board.addCircleToken(litlemove[0],litlemove[1],board.player_2)
-            #board.displayGameArea()
+            board.displayGameArea()
 
 
 
@@ -73,15 +74,17 @@ def minmax(state, depth, ismax):
 
    listofmove =get_possible_moves(state, 1).place_token
 
+
    if ismax:
             bestValue = -5000
             for move in listofmove:
                 print(listofmove)#le probleme est ici car la liste de move devient recursivement infinie
+                state.displayGameArea()
                 #copy du board
                 newState = deepcopy(state)
                 #on joue le coup
                 make_move(newState, move, 0, 1)
-                print("deeep tour ="+str(depth)+"player 1"+str(move))
+                print("deeep="+str(depth)+"player 1"+str(move))
                 value = minmax(newState, depth - 1, False)
                 bestValue = max(bestValue, value)
 
@@ -90,11 +93,13 @@ def minmax(state, depth, ismax):
    else:
         bestValue = 5000
         for move in listofmove:
+          print(listofmove)
+          state.displayGameArea()
           #copy du board
           newState = deepcopy(state)
           #on joue le coup
           make_move(newState, move, 0, 0)
-          #print("deeep tour ="+str(depth)+"player 2"+str(move))
+          print("deeep tour ="+str(depth)+"player 2"+str(move))
           value = minmax(newState, depth - 1, True)
           bestValue = min(bestValue, value)
 
@@ -108,7 +113,7 @@ if __name__ == '__main__':
     board.addCircleToken(2, 2, player_1)
     board.addCircleToken(1, 2, player_2)
     board.displayGameArea()
-    print("la valeur maximal est "+str(minmax(board, 2, True)))
+    print("la valeur maximal est "+str(minmax(board, 3,True)))
 
 
 
