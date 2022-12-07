@@ -105,15 +105,38 @@ def minmax(state, depth, ismax):
 
         return bestValue
 
+
+def findBestMove(board):
+    bestVal = -1000
+    bestMove = (-1, -1)
+    listofmove = get_possible_moves(board, 1).place_token
+
+    for move in listofmove:
+        # copy du board
+        newState = deepcopy(board)
+        # on joue le coup
+        make_move(newState, move, 0, 1)
+        moveVal = minmax(newState, 3, False)
+        print("moveVal=" + str(moveVal)+"move="+str(move))
+        if (moveVal > bestVal):
+            bestMove = move
+            bestVal = moveVal
+
+
+
+    print("The values of the best Move is :"+str(bestVal )+"le coup est "+str(bestMove))
+
+
 if __name__ == '__main__':
     player_1 = Player(0, "R")
     player_2 = Player(1, "B")
     board = GameArea(player_1, player_2)
-    board.addCircleToken(2, 0, player_1)
-    board.addCircleToken(2, 2, player_1)
-    board.addCircleToken(1, 2, player_2)
+    board.addCircleToken(2, 0, player_2)
+    board.addCircleToken(2, 1, player_2)
+    board.addCircleToken(0, 2, player_1)
     board.displayGameArea()
-    print("la valeur maximal est "+str(minmax(board, 3,True)))
+    print("la valeur maximal est "+str(minmax(board, 4,True)))
+    findBestMove(board)
 
 
 
