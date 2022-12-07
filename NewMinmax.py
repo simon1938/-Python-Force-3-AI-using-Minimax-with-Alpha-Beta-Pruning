@@ -71,11 +71,12 @@ def minmax(state, depth, ismax):
         return 0
    print("retour mini"+str(depth))
 
+   listofmove =get_possible_moves(state, 1).place_token
 
    if ismax:
             bestValue = -5000
-            for move in get_possible_moves(state,1).place_token:
-                #print(get_possible_moves(state,1).place_token)
+            for move in listofmove:
+                print(listofmove)#le probleme est ici car la liste de move devient recursivement infinie
                 #copy du board
                 newState = deepcopy(state)
                 #on joue le coup
@@ -88,7 +89,7 @@ def minmax(state, depth, ismax):
 
    else:
         bestValue = 5000
-        for move in get_possible_moves(state,0).place_token:
+        for move in listofmove:
           #copy du board
           newState = deepcopy(state)
           #on joue le coup
@@ -107,7 +108,7 @@ if __name__ == '__main__':
     board.addCircleToken(2, 2, player_1)
     board.addCircleToken(1, 2, player_2)
     board.displayGameArea()
-    print("la valeur maximal est "+str(minmax(board, 1, True)))
+    print("la valeur maximal est "+str(minmax(board, 2, True)))
 
 
 
