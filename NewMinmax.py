@@ -14,6 +14,7 @@ def evaluate(board : GameArea):
             return -10
         else:
             return 0
+
 def allmovecirculartokens(board):
     tab = [[]]
     for col in range(3):
@@ -48,10 +49,10 @@ def make_move(board,litlemove,indexmove,ismax):
     if(indexmove==0):
         if(ismax):
             board.addCircleToken(litlemove[0],litlemove[1],board.player_1)
-            board.displayGameArea()
+            #board.displayGameArea()
         else:
             board.addCircleToken(litlemove[0],litlemove[1],board.player_2)
-            board.displayGameArea()
+            #board.displayGameArea()
 
 
 
@@ -61,19 +62,29 @@ def make_move(board,litlemove,indexmove,ismax):
 
 def minmax(state, depth, ismax):
 
+   score = evaluate(state)
+   if(score==10):
+        return score
+   if(score==-10):
+        return score
+   if(depth==0):
+        return 0
+   print("retour mini"+str(depth))
 
 
    if ismax:
             bestValue = -5000
             for move in get_possible_moves(state,1).place_token:
+                #print(get_possible_moves(state,1).place_token)
                 #copy du board
                 newState = deepcopy(state)
                 #on joue le coup
                 make_move(newState, move, 0, 1)
-                print("un tour 1")
+                print("deeep tour ="+str(depth)+"player 1"+str(move))
                 value = minmax(newState, depth - 1, False)
                 bestValue = max(bestValue, value)
-                return bestValue
+
+            return bestValue
 
    else:
         bestValue = 5000
@@ -82,22 +93,25 @@ def minmax(state, depth, ismax):
           newState = deepcopy(state)
           #on joue le coup
           make_move(newState, move, 0, 0)
-          print("un tour 2")
+          #print("deeep tour ="+str(depth)+"player 2"+str(move))
           value = minmax(newState, depth - 1, True)
           bestValue = min(bestValue, value)
+
         return bestValue
 
 if __name__ == '__main__':
     player_1 = Player(0, "R")
     player_2 = Player(1, "B")
     board = GameArea(player_1, player_2)
-    board.addCircleToken(2, 0, player_2)
-    board.addCircleToken(2, 2, player_2)
-    board.addCircleToken(1, 2, player_1)
+    board.addCircleToken(2, 0, player_1)
+    board.addCircleToken(2, 2, player_1)
+    board.addCircleToken(1, 2, player_2)
     board.displayGameArea()
+    print("la valeur maximal est "+str(minmax(board, 1, True)))
 
-    allmove= get_possible_moves(board,1)
-    print(str(minmax(board, 0, True)))
+
+
+
 
 
 
