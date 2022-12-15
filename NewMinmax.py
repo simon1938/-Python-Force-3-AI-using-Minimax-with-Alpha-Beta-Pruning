@@ -193,25 +193,32 @@ def findBestMove(board):
     else:
         print("le meilleur coup est de placer un nouveau token en position " + str(bestMove) + " \nThe values of minimax of the best Move is :" + str(bestVal))
 
+    return bestMove,indexmovea
+
+def playia(move,board,player):
+    if(move[1]==-1):
+        if(player==0):
+             board.addCircleToken(move[0][0],move[0][1],board.player_1)
+        else:
+             board.addCircleToken(move[0][0],move[0][1],board.player_2)
+    else:
+        if(player==0):
+             board.addCircleToken(move[0][0],move[0][1],board.player_1)
+        else:
+             board.addCircleToken(move[0][0],move[0][1],board.player_2)
 
 if __name__ == '__main__':
     player_1 = Player(0, "R")
     player_2 = Player(1, "B")
     board = GameArea(player_1, player_2)
-    board.addCircleToken(2, 2, player_1)
-    board.addCircleToken(0, 0, player_2)
-    board.addCircleToken(2, 0, player_1)
-
-
-
-
+    board.addCircleToken(2, 2, player_2)
+    board.addCircleToken(0, 0, player_1)
+    board.addCircleToken(2, 0, player_2)
+    board.addCircleToken(0, 2, player_2)
 
     board.displayGameArea()
-    # print(allmovecirculartokens(board))
-    # print("hh"+str(get_possible_moves(board,1).move_tokens))
-    # print("hh" + str(get_possible_moves(board, 1).place_token))
+    jouer=findBestMove(board)
 
-    findBestMove(board)
 
 
 
