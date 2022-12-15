@@ -194,7 +194,7 @@ class GameArea:
                     player.circletoken_id += 1
                     return 1
                 else:
-                    print("There is already a circle token on this square token")
+                    #print("There is already a circle token on this square token")
                     return 0
             else:
                 print("There is no square token on this tile")

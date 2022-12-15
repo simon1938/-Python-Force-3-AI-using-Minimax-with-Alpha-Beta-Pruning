@@ -79,17 +79,17 @@ def minmax(state, depth, ismax):
    #evaluate the board
    score = evaluate(state)
    if(score==10):
-        state.displayGameArea()
+
         return score
    if(score==-10):
-        state.displayGameArea()
+
         return score
    #To add a end of the tree
    if(depth==0):
         return 0
-   state.displayGameArea()
-   #listofmove =get_possible_moves(state, 1).place_token
+
    listofmove = get_possible_moves(state, 1).move_tokens
+   listofmove2 = get_possible_moves(state, 1).place_token
 
    if ismax:
             bestValue = -5000
@@ -108,6 +108,12 @@ def minmax(state, depth, ismax):
                         #on appelle minmax sur le nouveau board
                         value = minmax(newState, depth - 1, False)
                         bestValue = max(bestValue, value)
+            for move in listofmove2:
+                newState = deepcopy(board)
+                # on joue le coup
+                make_move(newState, move, 0, 1, -1)
+                value = minmax(newState, depth - 1, False)
+                bestValue = max(bestValue, value)
 
             return bestValue
 
@@ -128,6 +134,14 @@ def minmax(state, depth, ismax):
                   value = minmax(newState, depth - 1, True)
                   bestValue = min(bestValue, value)
 
+
+        for move in listofmove2:
+            newState = deepcopy(board)
+            # on joue le coup
+            make_move(newState, move, 0, 1, -1)
+            value = minmax(newState, depth - 1, True)
+            bestValue = min(bestValue, value)
+
         return bestValue
 
 #permets de trouver le meilleur coup en utilisant minimax
@@ -136,7 +150,7 @@ def minmax(state, depth, ismax):
 def findBestMove(board):
     bestVal = -1000
     bestMove = (-1, -1)
-    indexmove=-1
+    indexmovea=-1
     listofmove = get_possible_moves(board, 1).move_tokens
     listofmove2 = get_possible_moves(board, 1).place_token
     print(listofmove)
@@ -148,7 +162,7 @@ def findBestMove(board):
                 newState = deepcopy(board)
                 # on joue le coup
                 make_move(newState, move, 1, 1,i)
-                moveVal = minmax(newState, 3, False)
+                moveVal = minmax(newState, 1, False)
                 print("moveVal=" + str(moveVal)+"move="+str(move)+"id_token="+str(i))
 
 
@@ -156,13 +170,17 @@ def findBestMove(board):
                     bestMove = move
                     bestVal = moveVal
                     indexmovea=i
+                if(bestVal==10):
+                    break
 
     for move in listofmove2:
+        if(bestVal==10):
+            break
         # copy du board
         newState = deepcopy(board)
         # on joue le coup
         make_move(newState, move, 0, 1,-1)
-        moveVal = minmax(newState, 3, False)
+        moveVal = minmax(newState, 1, False)
         print("moveVal=" + str(moveVal) + "move=" + str(move))
         if (moveVal > bestVal):
             bestMove = move
@@ -180,18 +198,18 @@ if __name__ == '__main__':
     player_1 = Player(0, "R")
     player_2 = Player(1, "B")
     board = GameArea(player_1, player_2)
-    board.addCircleToken(0, 2, player_1)
     board.addCircleToken(2, 2, player_1)
-    board.addCircleToken(2, 1, player_1)
-
     board.addCircleToken(0, 0, player_2)
-    board.addCircleToken(2, 0, player_2)
-    board.addCircleToken(0, 1, player_2)
+    board.addCircleToken(2, 0, player_1)
+
+
+
+
 
     board.displayGameArea()
-    print(allmovecirculartokens(board))
-    print("hh"+str(get_possible_moves(board,1).move_tokens))
-    print("hh" + str(get_possible_moves(board, 1).place_token))
+    # print(allmovecirculartokens(board))
+    # print("hh"+str(get_possible_moves(board,1).move_tokens))
+    # print("hh" + str(get_possible_moves(board, 1).place_token))
 
     findBestMove(board)
 
