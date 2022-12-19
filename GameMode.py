@@ -7,6 +7,8 @@ def start():
     while choice not in level_choice:
         choice = input()
 
+    return int(choice)
+
 def next_round(board, player):
     answer = choix(board, player)
     if answer == 1:
