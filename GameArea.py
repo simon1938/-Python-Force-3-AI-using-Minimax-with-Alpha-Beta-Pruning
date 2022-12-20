@@ -200,7 +200,7 @@ class GameArea:
                 print("There is no square token on this tile")
                 return 0
         else:
-            print("All of this player's circle token are already on the game area\n")
+            #print("All of this player's circle token are already on the game area\n")
             return 0
 
     # Moves a circle token onto another square token if there is no circle token on it yet
