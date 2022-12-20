@@ -6,11 +6,18 @@ from GameMode import isWinner
 from move import move
 
 # Checking if row can be complete by player or opponent
-def evaluate(board : GameArea):
-
-        if(isWinner(board,board.player_1)):
+def evaluate(board, ismax):
+    if ismax == 1:
+        if(isWinner(board,board.player_2)):
             return 10
-        elif(isWinner(board,board.player_2)):
+        elif(isWinner(board,board.player_1)):
+            return -10
+        else:
+            return 0
+    else:
+        if (isWinner(board, board.player_1)):
+            return 10
+        elif (isWinner(board, board.player_2)):
             return -10
         else:
             return 0
@@ -56,7 +63,7 @@ def make_move(board,litlemove,indexmove,ismax,circle_tokenid):
 
     #the indexmove is to select the type of move(0=place token,1=move token,2=move square 3 move 2square)
     if(indexmove==0):
-        if ismax == 1:
+        if ismax == 0:
             #litlemove is a list of two dimentions (list of coordinates) for where the token can be moved
             board.addCircleToken(litlemove[0],litlemove[1],board.player_1)
             #board.displayGameArea()
@@ -76,10 +83,10 @@ def make_move(board,litlemove,indexmove,ismax,circle_tokenid):
 
 
 
-def minmax(state, depth, ismax, board):
+def minmax(state, depth, ismax):
 
    #evaluate the board
-   score = evaluate(state)
+   score = evaluate(state, ismax)
    if(score==10):
 
         return score
@@ -92,8 +99,8 @@ def minmax(state, depth, ismax, board):
 
    listofmove = get_possible_moves(state, 1).move_tokens
    listofmove2 = get_possible_moves(state, 1).place_token
-
-   if ismax:
+   print(listofmove)
+   if ismax == 1:
             bestValue = -5000
             for move in listofmove:
                 #print(listofmove)
@@ -105,16 +112,16 @@ def minmax(state, depth, ismax, board):
                         newState = deepcopy(state)
                         #on joue le coup
                         #print("#############   "+str(i)+"   #############")
-                        make_move(newState, move, 1, 1,i)
+                        make_move(newState, move, 1, ismax,i)
                         #print("deeep="+str(depth)+"player 1"+str(move)+"id_token="+str(i))
                         #on appelle minmax sur le nouveau board
-                        value = minmax(newState, depth - 1, False, board)
+                        value = minmax(newState, depth - 1, False)
                         bestValue = max(bestValue, value)
             for move in listofmove2:
-                newState = deepcopy(board)
+                newState = deepcopy(state)
                 # on joue le coup
-                make_move(newState, move, 0, 1, -1)
-                value = minmax(newState, depth - 1, False, board)
+                make_move(newState, move, 0, ismax, -1)
+                value = minmax(newState, depth - 1, False)
                 bestValue = max(bestValue, value)
 
             return bestValue
@@ -130,18 +137,18 @@ def minmax(state, depth, ismax, board):
                   #print("#############   " + str(state.player_1.getnumberofcircletoken()) + "   #############")
                   newState = deepcopy(state)
                   #on joue le coup
-                  make_move(newState, move, 1, 0,i)
+                  make_move(newState, move, 1, ismax,i)
                   #print("deeep tour ="+str(depth)+"player 2"+str(move)+"id_token="+str(i))
                   #on appelle minmax sur le nouveau board
-                  value = minmax(newState, depth - 1, True, board)
+                  value = minmax(newState, depth - 1, True)
                   bestValue = min(bestValue, value)
 
 
         for move in listofmove2:
-            newState = deepcopy(board)
+            newState = deepcopy(state)
             # on joue le coup
-            make_move(newState, move, 0, 1, -1)
-            value = minmax(newState, depth - 1, True, board)
+            make_move(newState, move, 0, ismax, -1)
+            value = minmax(newState, depth - 1, True)
             bestValue = min(bestValue, value)
 
         return bestValue
@@ -153,10 +160,10 @@ def findBestMove(board, player):
     bestVal = -1000
     bestMove = (-1, -1)
     indexmovea=-1
-    listofmove = get_possible_moves(board, 1).move_tokens
-    listofmove2 = get_possible_moves(board, 1).place_token
-    print(listofmove)
-
+    listofmove = get_possible_moves(board, player.player_id).move_tokens
+    listofmove2 = get_possible_moves(board, player.player_id).place_token
+    print("liste des mouvements de jetons : " + str(listofmove))
+    print("liste des ajouts de jetons : " + str(listofmove2))
     for move in listofmove:
         # copy du board
 
@@ -164,8 +171,9 @@ def findBestMove(board, player):
                 newState = deepcopy(board)
                 # on joue le coup
                 make_move(newState, move, 1, player.player_id,i)
-                moveVal = minmax(newState, player.player_id, False, board)
-                print("moveVal=" + str(moveVal)+"move="+str(move)+"id_token="+str(i))
+
+                moveVal = minmax(newState, player.player_id, False)
+                print("moveVal = " + str(moveVal)+" move = " + str(move)+" id_token = " + str(i))
 
 
                 if (moveVal > bestVal):
@@ -182,9 +190,10 @@ def findBestMove(board, player):
         # copy du board
         newState = deepcopy(board)
         # on joue le coup
+        print("Player : " + str(player.player_id))
         make_move(newState, move, 0, player.player_id,-1)
-        moveVal = minmax(newState, player.player_id, False, board)
-        print("moveVal=" + str(moveVal) + "move=" + str(move))
+        moveVal = minmax(newState, player.player_id, False)
+        print("moveVal = " + str(moveVal) + " move = " + str(move))
         if (moveVal > bestVal):
             bestMove = move
             bestVal = moveVal
@@ -202,21 +211,19 @@ if __name__ == '__main__':
     player_1 = Player(0, "R")
     player_2 = Player(1, "B")
     board = GameArea(player_1, player_2)
-    board.addCircleToken(2, 2, player_1)
+    board.addCircleToken(2, 1, player_1)
     board.addCircleToken(0, 0, player_2)
-    board.addCircleToken(2, 0, player_1)
+    board.addCircleToken(2, 2, player_1)
     board.addCircleToken(0, 1, player_2)
 
-
-
-
-
     board.displayGameArea()
+
+
     # print(allmovecirculartokens(board))
     # print("hh"+str(get_possible_moves(board,1).move_tokens))
     # print("hh" + str(get_possible_moves(board, 1).place_token))
 
-    board = findBestMove(board, player_1)
+    board = findBestMove(board, player_2)
     board.displayGameArea()
 
 
