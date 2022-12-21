@@ -9,8 +9,8 @@ from tkinter import *
 mode = gm.start()
 
 #Creation of players
-player_1 = Player(1, "R")
-player_2 = Player(2, "B")
+player_1 = Player(0, "R")
+player_2 = Player(1, "B")
 
 #Assigning ai to players
 if mode == 2 or mode == 3:
@@ -39,7 +39,7 @@ check = "0"
 
 while check == "0":
     if player[round].isia == True:
-        board = ai.findBestMove(board, player[round])
+        board=ai.findBestMove(board, player[round])
     else:
         check = gm.next_round(board, player[round])
     board.displayGameArea()
@@ -48,6 +48,5 @@ while check == "0":
     else:
         round = 0
 exit()
-
 
 

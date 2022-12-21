@@ -121,7 +121,38 @@ def isWinner(board, player):
         else:
             check = 0
     return check
+def isWinnerIA(board, player):
+    combination = []
+    check = 0
+    if player.circletoken_id == 3:
+        token_1, token_2, token_3 = player.circletoken
+        id_1 = board.gamearea[token_1.get_X()][token_1.get_Y()].tile_id
+        id_2 = board.gamearea[token_2.get_X()][token_2.get_Y()].tile_id
+        id_3 = board.gamearea[token_3.get_X()][token_3.get_Y()].tile_id
 
+        #print(str(id_1) + str(id_2) + str(id_3))
+        if id_1 < id_2:
+            if id_2 < id_3:
+                combination = [id_1, id_2, id_3]
+            else:
+                if id_1 > id_3:
+                    combination = [id_3, id_1, id_2]
+                else:
+                    combination = [id_1, id_3, id_2]
+        else:
+            if id_1 < id_3:
+                combination = [id_2, id_1, id_3]
+            else:
+                if id_3 > id_2:
+                    combination = [id_2, id_3, id_1]
+                else:
+                    combination = [id_3, id_2, id_1]
+
+        if combination in CONSTANT.winning_combination:
+            check = 1
+        else:
+            check = 0
+    return check
 def choix(board, player):
 
     print("Player " + str(player.player_id) + " it's your turn :")
