@@ -45,9 +45,9 @@ class GameArea:
         print(board)
 
     # Swap the place of a square token with the empty tile
-    def switchTokenPosition(self, tile_1, tile_2):
+    def switchTokenPosition(self, tile_1, tile_2, isia):
 
-        if tile_1.tile_id != self.previous_empty_tile_id:
+        if tile_1.tile_id != self.previous_empty_tile_id or isia == True:
             self.previous_empty_tile_id = tile_2.tile_id
             # If tile_2 is the empty tile
             if tile_2.squaretoken is None:
@@ -80,59 +80,59 @@ class GameArea:
 
 
     # Checks if the square token can go on the empty tile and places it there if possible
-    def moveSquareToken(self, squaretoken):
+    def moveSquareToken(self, squaretoken, isia = False):
         # If the id of the empty tile is next to the square token
         if self.emptytile.tile_id == 1:
             if squaretoken.tile_id in {2,4}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
         elif self.emptytile.tile_id == 2:
             if squaretoken.tile_id in {1,5,3}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
         elif self.emptytile.tile_id == 3:
             if squaretoken.tile_id in {2,6}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
         elif self.emptytile.tile_id == 4:
             if squaretoken.tile_id in {1,5,7}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
         elif self.emptytile.tile_id == 5:
             if squaretoken.tile_id in {2,4,6,8}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
         elif self.emptytile.tile_id == 6:
             if squaretoken.tile_id in {3,5,9}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
         elif self.emptytile.tile_id == 7:
             if squaretoken.tile_id in {4,8}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
         elif self.emptytile.tile_id == 8:
             if squaretoken.tile_id in {5,7,9}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
         else:
             if squaretoken.tile_id in {6,8}:
-                check = self.switchTokenPosition(squaretoken, self.emptytile)
+                check = self.switchTokenPosition(squaretoken, self.emptytile, isia)
                 return check
             else:
                 return 0
