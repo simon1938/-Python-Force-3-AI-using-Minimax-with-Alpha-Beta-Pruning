@@ -24,18 +24,18 @@ player = [player_1, player_2]
 board = GameArea(player_1, player_2)
 board.displayGameArea()
 
-round = 0
+round = 1
 check = "0"
 
 while check == "0":
-    if player[round].isia == True:
-        board=ai.findBestMove(board, player[round])
-    else:
-        check = gm.next_round(board, player[round])
-    board.displayGameArea()
     if round == 0:
         round = 1
     else:
         round = 0
+    if player[round].isia == True:
+        board, check = ai.findBestMove(board, player[round])
+    else:
+        check = gm.next_round(board, player[round])
+    board.displayGameArea()
 exit()
 

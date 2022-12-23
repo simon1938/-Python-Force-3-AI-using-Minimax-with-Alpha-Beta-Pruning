@@ -403,7 +403,7 @@ def findBestMove(board,player):
             bestVal = moveVal
             indexmovea = -1
 
-    """
+
     # Test de déplacement de 2 squaretoken sur toutes les coordonnées disponibles du board
     for move in listofmove4:
         # Création d'une copie du board
@@ -418,7 +418,7 @@ def findBestMove(board,player):
             bestVal = moveVal
             indexmovea = -3
 
-    """
+
 
     if player_id == 0:
         colortoken = "Rouge"
@@ -442,6 +442,10 @@ def findBestMove(board,player):
               " \nThe values of minimax of the best Move is : " + str(bestVal))
 
     print("Move effectué \n")
+    check = "0"
+    if bestVal == 10:
+        print("Fin du jeu miskine tu t'es fait fumer par une ia !")
+        check = 1
 
     if indexmovea == -1:
         make_move(board, bestMove, 0, True, player_id, indexmovea)
@@ -452,7 +456,7 @@ def findBestMove(board,player):
     else:
         make_move(board, bestMove, 1, True, player_id, indexmovea)
 
-    return board
+    return board, check
 
 
 if __name__ == '__main__':
@@ -467,7 +471,7 @@ if __name__ == '__main__':
 
 
     board.displayGameArea()
-    findBestMove(board, board.player_1)
+    findBestMove(board, board.player_2)
     board.displayGameArea()
 
 
