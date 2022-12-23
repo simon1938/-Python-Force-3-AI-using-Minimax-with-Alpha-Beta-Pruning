@@ -155,19 +155,23 @@ def allmovecirculartokens(board):
     tab.pop(0)
 
     return tab
-def allmovesquaretokens(board):
+def allmovesquaretokens(board, nbofsquaretoken):
     tab = []
     # Récupération de la tile sur laquelle il n'y a pas de square token
     for i in range(3):
         for j in range(3):
             if not board.gamearea[i][j].isSquareToken():
                 empty_tile = board.gamearea[i][j]
-    # Récupération des id des square token pouvant être déplacé de 1 sur le board
-    temp = CONSTANT.moveable_squaretoken[str(empty_tile.tile_id)]
+    if nbofsquaretoken == 1:
+        # Récupération des id des square token pouvant être déplacé de 1 sur le board
+        temp = CONSTANT.moveable_1squaretoken[str(empty_tile.tile_id)]
+    else:
+        # Récupération des id des square token pouvant être déplacé de 2 sur le board
+        temp = CONSTANT.moveable_2squaretoken[str(empty_tile.tile_id)]
+
     # Récupération des coordonnées de chacunes des cases pouvant être déplacée de 1
     for x in range(len(temp)):
         tab.append(CONSTANT.correlation[str(temp[x])])
-
     return tab
 def get_possible_moves(board,ismax):
 
@@ -176,7 +180,8 @@ def get_possible_moves(board,ismax):
     allmove.place_token=allmovecirculartokens(board)
     allmove.move_tokens = [[]]
     allmove.move_tokens = allmovecirculartokens(board)
-    allmove.move_square = allmovesquaretokens(board)
+    allmove.move_square = allmovesquaretokens(board, 1)
+    allmove.move_2square = allmovesquaretokens(board, 2)
 
     return allmove
 
@@ -206,78 +211,85 @@ def make_move(board,litlemove,indexmove,ismax,player_id,circle_tokenid):
             board.moveCircleToken(litlemove[0], litlemove[1], thebadplayer, circle_tokenid)
     if indexmove == 2:
         board.moveSquareToken(board.gamearea[litlemove[0]][litlemove[1]], True)
-
-
-
-
-
+    if indexmove == 3:
+        board.move2SquareToken(board.gamearea[litlemove[0]][litlemove[1]], True)
 
 def minmax(state, depth, ismax,player_id):
+    if (player_id == 0):
+        thegoodplayer = state.player_1
+        thebadplayer = state.player_2
+    elif (player_id == 1):
+        thegoodplayer = state.player_2
+        thebadplayer = state.player_1
 
-   if (player_id == 0):
-         thegoodplayer = state.player_1
-         thebadplayer = state.player_2
-   elif (player_id == 1):
-         thegoodplayer = state.player_2
-         thebadplayer = state.player_1
-
-   # evaluate the board
-   score = evaluate(state, ismax,player_id)
-   if(score==10):
-
+    # evaluate the board
+    score = evaluate(state, ismax,player_id)
+    if(score==10):
         return score
-   if(score==-10):
-
+    if(score==-10):
         return score
-   # Si la profondeur maximale est atteinte
-   if(depth==0):
+    # Si la profondeur maximale est atteinte
+    if(depth==0):
         return score
 
-        # Récupération des coordonnées à tester
-   listofmove = get_possible_moves(state, 1).move_tokens
-   listofmove2 = get_possible_moves(state, 1).place_token
-   listofmove3 = get_possible_moves(state, 1).move_square
+    # Récupération des coordonnées à tester
+    listofmove = get_possible_moves(state, 1).move_tokens
+    listofmove2 = get_possible_moves(state, 1).place_token
+    listofmove3 = get_possible_moves(state, 1).move_square
+    listofmove4 = get_possible_moves(state, 1).move_2square
+    if ismax:
+        # Initialisation de la pire valeur
+        bestValue = -5000
 
-   if ismax:
-       # Initialisation de la pire valeur
-       bestValue = -5000
-       #Test de déplacement des squaretoken sur toutes les coordonnées disponibles du board
-       for move in listofmove3:
-           # Création d'une copie du board
-           newState = deepcopy(state)
-           # Éxecution du coup
-           make_move(newState, move, 2, True, player_id, -1)
-           value = minmax(newState, depth - 1, False, player_id)
-           # Test de la valeure obtenue
-           bestValue = max(bestValue, value)
+        # Test de déplacement d'un squaretoken sur toutes les coordonnées disponibles du board
+        for move in listofmove3:
+            # Création d'une copie du board
+            newState = deepcopy(state)
+            # Éxecution du coup
+            make_move(newState, move, 2, True, player_id, -1)
+            value = minmax(newState, depth - 1, False, player_id)
+            # Test de la valeure obtenue
+            bestValue = max(bestValue, value)
 
-       # Test de déplacement de circletoken sur toutes les coordonnées disponibles du board(tout les moves)
-       for move in listofmove:
-           # Pour chacun des circle token du board
-           for i in range(thegoodplayer.getnumberofcircletoken()):
-               # Création d'une copie du board
-               newState = deepcopy(state)
-               # Execution du coup
-               make_move(newState, move, 1, True, player_id, i)
-               # Appelle de minmax sur le nouveau board
-               value = minmax(newState, depth - 1, False, player_id)
-               # Test de la valeure obtenue
-               bestValue = max(bestValue, value)
+        # Test de déplacement de circletoken sur toutes les coordonnées disponibles du board(tout les moves)
+        for move in listofmove:
+            # Pour chacun des circle token du board
+            for i in range(thegoodplayer.getnumberofcircletoken()):
+                # Création d'une copie du board
+                newState = deepcopy(state)
+                # Execution du coup
+                make_move(newState, move, 1, True, player_id, i)
+                # Appelle de minmax sur le nouveau board
+                value = minmax(newState, depth - 1, False, player_id)
+                # Test de la valeure obtenue
+                bestValue = max(bestValue, value)
 
-       for move in listofmove2:
-           # Création d'une copie du board
-           newState = deepcopy(state)
-           # Éxecution du coup
-           make_move(newState, move, 0, True, player_id, -1)
-           value = minmax(newState, depth - 1, False, player_id)
-           # Test de la valeure obtenue
-           bestValue = max(bestValue, value)
+        for move in listofmove2:
+            # Création d'une copie du board
+            newState = deepcopy(state)
+            # Éxecution du coup
+            make_move(newState, move, 0, True, player_id, -1)
+            value = minmax(newState, depth - 1, False, player_id)
+            # Test de la valeure obtenue
+            bestValue = max(bestValue, value)
 
-       return bestValue
-   else:
-       bestValue = 5000
 
-       for move in listofmove3:
+        # Test de déplacement de deux squaretoken sur toutes les coordonnées disponibles du board
+        for move in listofmove4:
+            # Création d'une copie du board
+            newState = deepcopy(state)
+            # Éxecution du coup
+            make_move(newState, move, 3, True, player_id, -1)
+            value = minmax(newState, depth - 1, False, player_id)
+            # Test de la valeure obtenue
+            bestValue = max(bestValue, value)
+
+        return bestValue
+
+    else:
+        # Initialisation de la pire valeur
+        bestValue = 5000
+        for move in listofmove3:
            # Création d'une copie du board
            newState = deepcopy(state)
            # Éxecution du coup
@@ -286,7 +298,7 @@ def minmax(state, depth, ismax,player_id):
            # Test de la valeure obtenue
            bestValue = min(bestValue, value)
 
-       for move in listofmove:
+        for move in listofmove:
            for i in range(thebadplayer.getnumberofcircletoken()):
                # Création d'une copie du board
                newState = deepcopy(state)
@@ -297,7 +309,7 @@ def minmax(state, depth, ismax,player_id):
                # Test de la valeure obtenue
                bestValue = min(bestValue, value)
 
-       for move in listofmove2:
+        for move in listofmove2:
            # Création d'une copie du board
            newState = deepcopy(state)
            # Éxecution du coup
@@ -306,7 +318,17 @@ def minmax(state, depth, ismax,player_id):
            # Test de la valeure obtenue
            bestValue = min(bestValue, value)
 
-       return bestValue
+
+        # Test de déplacement de deux squaretoken sur toutes les coordonnées disponibles du board
+        for move in listofmove4:
+            # Création d'une copie du board
+            newState = deepcopy(state)
+            # Éxecution du coup
+            make_move(newState, move, 3, False, player_id, -1)
+            value = minmax(newState, depth - 1, True, player_id)
+            # Test de la valeure obtenue
+            bestValue = min(bestValue, value)
+        return bestValue
 
 # Fonction permettant de trouver le meilleur coup grâce à minmax pour un joueur donné
 # Évaluation de tous les coups possibles au premier tour avec minmax
@@ -333,18 +355,20 @@ def findBestMove(board,player):
     listofmove = get_possible_moves(board, 1).move_tokens
     listofmove2 = get_possible_moves(board, 1).place_token
     listofmove3 = get_possible_moves(board, 1).move_square
+    listofmove4 = get_possible_moves(board, 1).move_2square
+
 
     # Test de déplacement des squaretoken sur toutes les coordonnées disponibles du board
-    # for move in listofmove3:
-    #     # Création d'une copie du board
-    #     newState = deepcopy(board)
-    #     # Execution du coup
-    #     make_move(newState, move, 2, True, player_id, -1)
-    #     moveVal = minmax(newState, 2, False, player_id)
-    #     if moveVal > bestVal:
-    #         bestMove = move
-    #         bestVal = moveVal
-    #         indexmovea = -2
+    for move in listofmove3:
+        # Création d'une copie du board
+        newState = deepcopy(board)
+        # Execution du coup
+        make_move(newState, move, 2, True, player_id, -1)
+        moveVal = minmax(newState, 2, False, player_id)
+        if moveVal > bestVal:
+            bestMove = move
+            bestVal = moveVal
+            indexmovea = -2
 
     # Test de déplacement de circletoken sur toutes les coordonnées disponibles du board(tout les moves)
     for move in listofmove:
@@ -379,6 +403,23 @@ def findBestMove(board,player):
             bestVal = moveVal
             indexmovea = -1
 
+    """
+    # Test de déplacement de 2 squaretoken sur toutes les coordonnées disponibles du board
+    for move in listofmove4:
+        # Création d'une copie du board
+        newState = deepcopy(board)
+        # Execution du coup
+        make_move(newState, move, 3, True, player_id, -1)
+        #newState.displayGameArea()
+        moveVal = minmax(newState, 3, False, player_id)
+        #print(str(moveVal))
+        if moveVal > bestVal:
+            bestMove = move
+            bestVal = moveVal
+            indexmovea = -3
+
+    """
+
     if player_id == 0:
         colortoken = "Rouge"
     else:
@@ -388,7 +429,11 @@ def findBestMove(board,player):
         print("le meilleur coup est de placer un nouveau token de couleur " + colortoken + " en position  " +
               str(bestMove) + " \nThe values of minimax of the best Move is : " + str(bestVal))
     elif indexmovea == -2:
-        print("le meilleur coup est de bouger le square token ayant l'identifiant " +
+        print("le meilleur coup est de bouger 1 square token ayant l'identifiant " +
+              str(board.gamearea[bestMove[0]][bestMove[1]].tile_id) +
+              " \nThe values of minimax of the best Move is : " + str(bestVal))
+    elif indexmovea == -3:
+        print("le meilleur coup est de bouger 2 square token ayant l'identifiant " +
               str(board.gamearea[bestMove[0]][bestMove[1]].tile_id) +
               " \nThe values of minimax of the best Move is : " + str(bestVal))
     else:
@@ -402,6 +447,8 @@ def findBestMove(board,player):
         make_move(board, bestMove, 0, True, player_id, indexmovea)
     elif indexmovea == -2:
         make_move(board, bestMove, 2, True, player_id, -1)
+    elif indexmovea == -3:
+        make_move(board, bestMove, 3, True, player_id, -1)
     else:
         make_move(board, bestMove, 1, True, player_id, indexmovea)
 
@@ -412,17 +459,15 @@ if __name__ == '__main__':
     player_1 = Player(0, "R")
     player_2 = Player(1, "B")
     board = GameArea(player_1, player_2)
-    board.addCircleToken(0, 0, player_1)
-    board.addCircleToken(2, 0, player_1)
-
-
-
-
-
+    board.moveSquareToken(board.gamearea[0][1])
+    board.moveSquareToken(board.gamearea[0][0])
+    board.addCircleToken(1, 1, player_1)
+    board.addCircleToken(2, 1, player_1)
+    board.addCircleToken(0, 2, player_1)
 
 
     board.displayGameArea()
-    findBestMove(board,board.player_1)
+    findBestMove(board, board.player_1)
     board.displayGameArea()
 
 
