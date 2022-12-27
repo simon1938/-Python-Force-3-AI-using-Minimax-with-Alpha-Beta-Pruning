@@ -25,9 +25,9 @@ board = GameArea(player_1, player_2)
 board.displayGameArea()
 
 round = 1
-check = "0"
+check = 0
 
-while check == "0":
+while check == 0:
     if round == 0:
         round = 1
     else:
@@ -38,4 +38,3 @@ while check == "0":
         check = gm.next_round(board, player[round])
     board.displayGameArea()
 exit()
-

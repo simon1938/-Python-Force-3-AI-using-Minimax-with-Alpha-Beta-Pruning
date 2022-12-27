@@ -93,9 +93,9 @@ def evaluate(board,ismax,player_id):
             val_evaluate = val_evaluate + 1
 
     # Initialization of the weight according to the number of tokens compared to the other player
-    val_nb_jeton=None
-    if (thegoodplayer.circletoken_id > thebadplayer.circletoken_id):
-        val_nb_jeton=1
+    val_nb_jeton=0
+    if (thegoodplayer.circletoken_id >= thebadplayer.circletoken_id):
+        val_nb_jeton=5
 
     # For the min player
     # Initialization of weights for two circle tokens in the same direction
@@ -106,26 +106,28 @@ def evaluate(board,ismax,player_id):
             val_evaluate_bad = val_evaluate_bad - 1
 
     # Initialization of the weight according to the number of tokens compared to the other player
-    val_nb_jeton_bad = None
-    if (thebadplayer.circletoken_id > thegoodplayer.circletoken_id):
-        val_nb_jeton_bad = -1
+    val_nb_jeton_bad = 0
+    if (thebadplayer.circletoken_id >= thegoodplayer.circletoken_id):
+        val_nb_jeton_bad = -5
 
     # So thegoodplayer is the player who we want to will
     # thebadplayer is the player who we want to lose
     # they depend of the player_id
     if ismax == 1:
+
         if isWinnerIA(board,thegoodplayer):
             return 10
         elif isWinnerIA(board,thebadplayer):
             return -10
-        elif (val_nb_jeton != None and val_evaluate!=0):
+        elif (val_nb_jeton != 0 and val_evaluate!=0):
             val_evaluate=val_evaluate+ val_nb_jeton
             return val_evaluate
+        elif (val_nb_jeton != None):
+            return val_nb_jeton
         elif(val_evaluate!=0):
             return val_evaluate
-        elif(val_nb_jeton != None):
-            return val_nb_jeton
         else:
+            # print("error")
             return 0
 
     elif ismax == 0:
@@ -133,14 +135,16 @@ def evaluate(board,ismax,player_id):
             return 10
         elif isWinnerIA(board,thebadplayer):
             return -10
-        elif (val_nb_jeton_bad != None and val_evaluate_bad != 0):
+        elif (val_nb_jeton_bad != 0 and val_evaluate_bad != 0):
             val_evaluate_bad = val_evaluate_bad + val_nb_jeton_bad
-            return val_evaluate_bad
-        elif (val_evaluate_bad != 0):
             return val_evaluate_bad
         elif (val_nb_jeton_bad != None):
             return val_nb_jeton_bad
+        elif (val_evaluate_bad != 0):
+            return val_evaluate_bad
+
         else:
+            # print("rien")
             return 0
 
 # Define a list of two dimentions (list of coordinates) for where the token can be moved
@@ -249,6 +253,7 @@ def minmax(state, depth, ismax,player_id):
             # Éxecution du coup
             make_move(newState, move, 2, True, player_id, -1)
             value = minmax(newState, depth - 1, False, player_id)
+            #print("value", value)
             # Test de la valeure obtenue
             bestValue = max(bestValue, value)
 
@@ -329,6 +334,7 @@ def minmax(state, depth, ismax,player_id):
             value = minmax(newState, depth - 1, True, player_id)
             # Test de la valeure obtenue
             bestValue = min(bestValue, value)
+
         return bestValue
 
 # Fonction permettant de trouver le meilleur coup grâce à minmax pour un joueur donné
@@ -336,6 +342,7 @@ def minmax(state, depth, ismax,player_id):
 # Renvois le board avec le meilleur coup effectué
 def findBestMove(board,player):
 
+    deepinit=CONSTANT.deep
     #initialisation de l'id du joueur avec qui l'on souhaite optimiser le coup avec minmax
     player_id=player.player_id
 
@@ -359,13 +366,13 @@ def findBestMove(board,player):
     listofmove4 = get_possible_moves(board).move_2square
 
 
-    # Test de déplacement des squaretoken sur toutes les coordonnées disponibles du board
+    #Test de déplacement des squaretoken sur toutes les coordonnées disponibles du board
     for move in listofmove3:
         # Création d'une copie du board
         newState = deepcopy(board)
         # Execution du coup
         make_move(newState, move, 2, True, player_id, -1)
-        moveVal = minmax(newState, 3, False, player_id)
+        moveVal = minmax(newState, deepinit, False, player_id)
         if moveVal > bestVal:
             bestMove = move
             bestVal = moveVal
@@ -379,7 +386,7 @@ def findBestMove(board,player):
             newState = deepcopy(board)
             # Éxecution du coup
             make_move(newState, move, 1, True, player_id, i)
-            moveVal = minmax(newState, 3, False, player_id)
+            moveVal = minmax(newState, deepinit, False, player_id)
 
             # Si la valeure de coup joué est meilleure que la valeure du meilleur coup
             if moveVal > bestVal:
@@ -397,7 +404,7 @@ def findBestMove(board,player):
         newState = deepcopy(board)
         # Execution du coup
         make_move(newState, move, 0, True, player_id, -1)
-        moveVal = minmax(newState, 3, False, player_id)
+        moveVal = minmax(newState, deepinit, False, player_id)
 
         if moveVal > bestVal:
             bestMove = move
@@ -405,14 +412,16 @@ def findBestMove(board,player):
             indexmovea = -1
 
 
-    # Test de déplacement de 2 squaretoken sur toutes les coordonnées disponibles du board
+    #Test de déplacement de 2 squaretoken sur toutes les coordonnées disponibles du board
     for move in listofmove4:
+        if bestVal == 10:
+            break
         # Création d'une copie du board
         newState = deepcopy(board)
         # Execution du coup
-        make_move(newState, move, 3, True, player_id, -1)
+        make_move(newState, move, 2, True, player_id, -1)
         #newState.displayGameArea()
-        moveVal = minmax(newState, 3, False, player_id)
+        moveVal = minmax(newState,deepinit, False, player_id)
         #print(str(moveVal))
         if moveVal > bestVal:
             bestMove = move
@@ -443,10 +452,10 @@ def findBestMove(board,player):
               " \nThe values of minimax of the best Move is : " + str(bestVal))
 
     print("Move effectué \n")
-    check = "0"
-    if bestVal == 10:
-        print("Fin du jeu miskine tu t'es fait fumer par une ia !")
-        check = 1
+    check = 0
+    # if bestVal == 10:
+    #     print("Fin du jeu miskine tu t'es fait fumer par une ia !")
+    #     check = 1
 
     if indexmovea == -1:
         make_move(board, bestMove, 0, True, player_id, indexmovea)
@@ -457,7 +466,10 @@ def findBestMove(board,player):
     else:
         make_move(board, bestMove, 1, True, player_id, indexmovea)
 
-    return board, check
+    if isWinnerIA(board, thegoodplayer):
+        print("Fin du jeu miskine tu t'es fait fumer par une ia !")
+        check = 1
+    return board,check
 
 
 if __name__ == '__main__':
@@ -468,10 +480,15 @@ if __name__ == '__main__':
     board.moveSquareToken(board.gamearea[0][0])
     board.addCircleToken(1, 1, player_1)
     board.addCircleToken(2, 1, player_1)
-    board.addCircleToken(0, 2, player_1)
+    board.addCircleToken(0, 2, player_2)
+    board.addCircleToken(1, 0, player_2)
 
 
     board.displayGameArea()
+    # for i in range(10):
+    #     c= findBestMove(board, board.player_2)
+    #     if c == "1":
+    #         break
     findBestMove(board, board.player_2)
     board.displayGameArea()
 
