@@ -23,18 +23,28 @@ player = [player_1, player_2]
 #Creation of the game board
 board = GameArea(player_1, player_2)
 board.displayGameArea()
+"""
+board.addCircleToken(2,0,player_1)
 
-round = 1
-check = 0
+board.displayGameArea()
+board.moveCircleToken(2,1,player_1,0)
 
-while check == 0:
+board.displayGameArea()
+
+board.moveCircleToken(2,2,player_1,0)
+board.displayGameArea()
+"""
+round = 0
+check = "0"
+
+while check == "0":
+    if player[round].isia == True:
+        board=ai.findBestMove(board, player[round])
+    else:
+        check = gm.next_round(board, player[round])
+    board.displayGameArea()
     if round == 0:
         round = 1
     else:
         round = 0
-    if player[round].isia == True:
-        board, check = ai.findBestMove(board, player[round])
-    else:
-        check = gm.next_round(board, player[round])
-    board.displayGameArea()
 exit()

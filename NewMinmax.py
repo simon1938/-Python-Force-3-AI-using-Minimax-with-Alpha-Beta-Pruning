@@ -452,7 +452,7 @@ def findBestMove(board,player):
               " \nThe values of minimax of the best Move is : " + str(bestVal))
 
     print("Move effectué \n")
-    check = 0
+    check = "0"
     # if bestVal == 10:
     #     print("Fin du jeu miskine tu t'es fait fumer par une ia !")
     #     check = 1
@@ -466,10 +466,11 @@ def findBestMove(board,player):
     else:
         make_move(board, bestMove, 1, True, player_id, indexmovea)
 
-    if isWinnerIA(board, thegoodplayer):
-        print("Fin du jeu miskine tu t'es fait fumer par une ia !")
-        check = 1
-    return board,check
+    # if isWinnerIA(board, thegoodplayer):
+    #     print("Fin du jeu miskine tu t'es fait fumer par une ia !")
+    #     check = "1"
+    # return board,check
+    return board
 
 
 if __name__ == '__main__':
