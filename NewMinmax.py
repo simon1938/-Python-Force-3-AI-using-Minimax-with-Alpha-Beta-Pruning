@@ -119,13 +119,13 @@ def evaluate(board,ismax,player_id):
             return 10
         elif isWinnerIA(board,thebadplayer):
             return -10
-        elif (val_nb_jeton != 0 and val_evaluate!=0):
-            val_evaluate=val_evaluate+ val_nb_jeton
-            return val_evaluate
+        # elif (val_nb_jeton != 0 and val_evaluate!=0):
+        #     val_evaluate=val_evaluate+ val_nb_jeton
+        #     return val_evaluate
         elif (val_nb_jeton != None):
             return val_nb_jeton
-        elif(val_evaluate!=0):
-            return val_evaluate
+        # elif(val_evaluate!=0):
+        #     return val_evaluate
         else:
             # print("error")
             return 0
@@ -135,13 +135,13 @@ def evaluate(board,ismax,player_id):
             return 10
         elif isWinnerIA(board,thebadplayer):
             return -10
-        elif (val_nb_jeton_bad != 0 and val_evaluate_bad != 0):
-            val_evaluate_bad = val_evaluate_bad + val_nb_jeton_bad
-            return val_evaluate_bad
+        # elif (val_nb_jeton_bad != 0 and val_evaluate_bad != 0):
+        #     val_evaluate_bad = val_evaluate_bad + val_nb_jeton_bad
+        #     return val_evaluate_bad
         elif (val_nb_jeton_bad != None):
             return val_nb_jeton_bad
-        elif (val_evaluate_bad != 0):
-            return val_evaluate_bad
+        # elif (val_evaluate_bad != 0):
+        #     return val_evaluate_bad
 
         else:
             # print("rien")
