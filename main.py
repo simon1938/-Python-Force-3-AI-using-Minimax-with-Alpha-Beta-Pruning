@@ -39,7 +39,7 @@ check = "0"
 
 while check == "0":
     if player[round].isia == True:
-        board=ai.findBestMove(board, player[round])
+        board,check=ai.findBestMove(board, player[round])
     else:
         check = gm.next_round(board, player[round])
     board.displayGameArea()
